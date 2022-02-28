@@ -1,0 +1,42 @@
+body, html {
+    background-color: #36393f;
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
+.container-fluid {
+    width: 100%;
+    height: 100%;
+}
+
+table.dataTable tbody tr {
+  background-color: #343a40;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+  color: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+  color: #fff !important;
+}
+
+h1{
+  font-size: 25px;
+  text-align: center;
+  color: #55575d;
+}
+
+a {
+  padding-right: 10px;
+}
+
+
+.cover {
+  width: 35%;
+}

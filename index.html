@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta property="og:url" content="https://tournament.weyrd.space">
+    <meta property="og:title" content="Dunno">
+    <meta property="og:site_name" content="Wytsumo">
+    <meta property="og:description" content="Pour le plaisir de gagner du temps">
+    <meta name="theme-color" content="#aaaaaa">
+    <meta property="og:image" content="http://weyrd.space/images/push.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Osu!Autournament</title>
+
+    <link rel="icon" href="/media/ico/Wyrd.ico">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js">
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2"></div> <!-- spacer -->
+            <div class="options col-md-3">
+
+                <div class="row">
+                    <label for="warmupNumber" class="col-form-label">Number of warmup :</label>
+                    <input class="form-control" type="number" value="0" id="warmupNumber">
+                </div>
+
+                <div class="row">
+                    <label for="forFunNumber" class="col-form-label">Map for fun :</label>
+                    <input class="form-control" type="number" value="0" id="forFunNumber">
+                </div>
+            </div>
+            <div class="col-md-1"></div> <!-- spacer -->
+            <div class="mp-link col-md-5">
+              <div class="row">
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="">Mp Link</span>
+                </div>
+                <input type="text" id="mpLink" class="form-control">
+            </div>
+            <div class="row">
+
+                  <label for="reffereName">Reffere IGN :</label>
+                  <input type="email" class="form-control" id="reffereName" placeholder="randomName">
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:25px">
+            <div class="match col-md-12">
+              <h3 id="mvp" class="text-center"></h3>
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top:25px">
+            <div class="match col-md-12">
+              <table id="matchTab" class="table table-dark table-striped table-bordered table-hover pb-5">
+              </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="trucacc col-xs-12"></div>
+        </div>
+    </div>
+</body>
+
+</html>
