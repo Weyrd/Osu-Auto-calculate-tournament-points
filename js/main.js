@@ -306,7 +306,6 @@ function construcTab(jsonMatch, resets) {
     console.log("match");
     $("#matchTab").html(tabMatch(maps, name, resets))
   }
-  //datatables_beautify("#matchTab")
 }
 
 
@@ -393,7 +392,7 @@ $("#lobbysel").change(function () {
       id = id[id.length - 1]
 
       getMatch(id, false)
-    }, 20000);
+    }, 10000);
   });
 })
 
@@ -404,40 +403,6 @@ function reset() {
     .clear()
     .draw();
 }
-
-function datatables_beautify(name) {
-  $("#matchTab").DataTable({
-    aLengthMenu: [
-      [25, 50, 100, 200, -1],
-      [25, 50, 100, 200, "All"]
-    ],
-    iDisplayLength: -1
-    /*"retrieve": true,
-    "responsive": true,
-    "deferRender": true,
-
-    /*"columnDefs": [
-      {"orderable": false,
-        "targets": []},
-
-      {"searchable": false,
-        "targets": []},
-
-      {'visible': true,
-        "targets": [1,2,3,4]},
-
-      {"targets":[0],
-      "visible": false },
-
-      /*{"targets":[0,3],
-      "className": "mobile" }
-
-    ],*/
-  }); //fin databale
-}
-// https://osu.ppy.sh/api/get_user?k=" + TOKEN + "&u=7820468
-// https://a.ppy.sh/7820468
-
 
 
 var team = {
