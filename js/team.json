@@ -1,14 +1,174 @@
-{
-    "teams" : {
-        "owo teams" : {
-            "captain" : "agosthyno3449"
-        }
+var team = {
+  "teams": {
+    "TeamA": {
+      "captain": "Numero_Zer0e",
+      "t1" : {"userid": 7630971, "username" : "VROUM CV VITE", "multiplicator": 0.6},
+      "t2" : {"userid": 13607925, "username" : "Matroc", "multiplicator": 0.8},
+      "t3" : {"userid": 13352562, "username" : "Numero_Zer0e", "multiplicator": 1},
+    },
+    "TeamB": {
+      "captain": "[Kaichou]",
+      "t1" : {"userid": 4141918, "username" : "thundur", "multiplicator": 0.6},
+      "t2" : {"userid": 7898584, "username" : "[Kaichou]", "multiplicator":  0.8},
+      "t3" : {"userid": 14951633, "username" : "LouisD", "multiplicator": 1},
+    },
+    "Souci de Compétence": {
+      "captain": "Crynless",
+      "t1" : {"userid": 8236827, "username" : "Fumatsu", "multiplicator": 0.6},
+      "t2" : {"userid": 11395097, "username" : "Kurumy", "multiplicator":  0.8},
+      "t3" : {"userid": 5850031, "username" : "Crynless", "multiplicator": 1},
+    },
+    "Speed Abusers": {
+      "captain": "Fuki",
+      "t1" : {"userid": 3674590, "username" : "Sukiye", "multiplicator": 0.65},
+      "t2" : {"userid": 6567341, "username" : "Fuki", "multiplicator":  0.8},
+      "t3" : {"userid": 9209071, "username" : "Isillios", "multiplicator": 1},
+    },
+    "TeamE": {
+      "captain": "XeKr",
+      "t1" : {"userid": 7640581, "username" : "Lexonox", "multiplicator": 0.65},
+      "t2" : {"userid": 11559857, "username" : "Youlix", "multiplicator":  0.8},
+      "t3" : {"userid": 9358042, "username" : "XeKr", "multiplicator": 1},
+    },
+    "AR 8 enjoyer": {
+      "captain": "WesomePizza",
+      "t1" : {"userid": 10304774, "username" : "Ilmay", "multiplicator": 0.7},
+      "t2" : {"userid": 16417954, "username" : "WesomePizza", "multiplicator":  0.8},
+      "t3" : {"userid": 14394351, "username" : "I4MTRUE", "multiplicator": 1},
+    },
+    "FlasTEH Fanclub": {
+      "captain": "Hyuras",
+      "t1" : {"userid": 13579528, "username" : "Hyuras", "multiplicator": 0.7},
+      "t2" : {"userid": 11934951, "username" : "Osu Prop", "multiplicator":  0.8},
+      "t3" : {"userid": 11189164, "username" : "Ryshult", "multiplicator": 1},
+    },
+    "TeamH": {
+      "captain": "Not Airwam",
+      "t1" : {"userid": 14309415, "username" : "submissive", "multiplicator": 0.7},
+      "t2" : {"userid": 6402779, "username" : "Flamiror", "multiplicator":  0.8},
+      "t3" : {"userid": 17442279, "username" : "Not Airwam", "multiplicator": 1},
+    },
+    "gift issue": {
+      "captain": "NeoBurgerYT",
+      "t1" : {"userid": 8769136, "username" : "Takamin", "multiplicator": 0.7},
+      "t2" : {"userid": 12138133, "username" : "NeoBurgerYT", "multiplicator":  0.8},
+      "t3" : {"userid": 12176990, "username" : "Panzers", "multiplicator": 1},
+    },
+    "TeamJ": {
+      "captain": "Warex",
+      "t1" : {"userid": 10819779, "username" : "Warex", "multiplicator": 0.7},
+      "t2" : {"userid": 9282017, "username" : "Forw3n", "multiplicator":  0.8},
+      "t3" : {"userid": 7020512, "username" : "Kayuzo", "multiplicator": 1},
+    },
+    "Mouseesport et le T3": {
+      "captain": "Jaroda2000",
+      "t1" : {"userid": 4784772, "username" : "]- Cloud -[", "multiplicator": 0.7},
+      "t2" : {"userid": 14335827, "username" : "Gifted", "multiplicator":  0.8},
+      "t3" : {"userid": 7622802, "username" : "Jaroda2000", "multiplicator": 1},
+    },
+    "Hot Wheels Acceleracers": {
+      "captain": "JeeeeeeeeeeeeeJ",
+      "t1" : {"userid": 4869346, "username" : "Afmun", "multiplicator": 0.7},
+      "t2" : {"userid": 8831121, "username" : "JeeeeeeeeeeeeeJ", "multiplicator":  0.8},
+      "t3" : {"userid": 14363130, "username" : "Shydio", "multiplicator": 1},
+    },
+    "Atsukotrobo": {
+      "captain": "Foussilin",
+      "t1" : {"userid": 11934348, "username" : "Foussilin", "multiplicator": 0.7},
+      "t2" : {"userid": 12674517, "username" : "Fayar", "multiplicator":  0.8},
+      "t3" : {"userid": 27590609, "username" : "Yusahira", "multiplicator": 1},
+    },
+    "Super Seducers": {
+      "captain": "Tig",
+      "t1" : {"userid": 13935409, "username" : "BioTyC", "multiplicator": 0.7},
+      "t2" : {"userid": 6745742, "username" : "Tig", "multiplicator":  0.8},
+      "t3" : {"userid": 9652467, "username" : "LeDes", "multiplicator": 1},
+    },
+    "Aujourd'hui on Vaz": {
+      "captain": "BProd",
+      "t1" : {"userid": 11345747, "username" : "BProd", "multiplicator": 0.65},
+      "t2" : {"userid": 3723612, "username" : "Rulue", "multiplicator":  0.8},
+      "t3" : {"userid": 1522146, "username" : "Aidown", "multiplicator": 1},
+    },
+    "TeamP": {
+      "captain": "-raizen-",
+      "t1" : {"userid": 3872987, "username" : "-raizen-", "multiplicator": 0.65},
+      "t2" : {"userid": 13682992, "username" : "lachevre", "multiplicator":  0.8},
+      "t3" : {"userid": 4715753, "username" : "Tarkhen", "multiplicator": 1},
     },
 
-    "lobby" : {
-        "H31": {
-            "1" : "owokashi",
-            "2" : "Sverd"
-        }
+  },
+
+  "lobby": {
+    "RO16_1": {
+      "1": "TeamA",
+      "2": "TeamP",
+      "mappool": "RO16"
+    },
+    "RO16_2": {
+      "1": "TeamH",
+      "2": "gift issue",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_3": {
+      "1": "Speed Abusers",
+      "2": "Atsukotrobo",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_4": {
+      "1": "TeamE",
+      "2": "Hot Wheels Acceleracers",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_5": {
+      "1": "TeamB",
+      "2": "Aujourd'hui on Vaz",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_6": {
+      "1": "FlasTEH Fanclub",
+      "2": "TeamJ",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_7": {
+      "1": "Souci de Compétence",
+      "2": "Super Seducers",
+      "mappool": "RO16"
+    }
+    ,
+    "RO16_8": {
+      "1": "AR 8 enjoyer",
+      "2": "Mouseesport et le T3",
+      "mappool": "RO16"
+    }
+
+  },
+  "mappools": {
+    "RO16": {
+      "NM1": 2742359,
+      "NM2": 3373876,
+      "NM3": 2835894,
+      "NM4": 2154177,
+      "NM5": 2613061,
+      "HD1": 3264577,
+      "HD2": 52741,
+      "HD3": 1515987,
+      "HR1": 2297631,
+      "HR2": 3356278,
+      "HR3": 3029745,
+      "DT1": 1939016,
+      "DT2": 1860373,
+      "DT3": 45076,
+      "TB3": 351752,
+      "TB3": 2608893,
+      "TB3": 2224209
+    }
+  }
 }
+
 }

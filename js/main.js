@@ -4,7 +4,9 @@ var apiResult = {}
 var MULTIPLICATOR_T1 = 1
 var MULTIPLICATOR_T2 = 1
 var MULTIPLICATOR_T3 = 1
-// 
+var last_pick = 1
+var lobbyVAR = ""
+//
 function getMatch(id, reset) {
   if (isNaN(parseInt(id))) {
     alert("Merci de coller un match link valide");
@@ -17,7 +19,7 @@ function getMatch(id, reset) {
     $.ajax({
       method: 'POST',
       url: "https://osu.ppy.sh/api/get_match?mp=" + id + "&k=" + TOKEN,
-      success: function (result) {
+      success: function(result) {
         apiResult["referee"] = $("#reffereName").val()
 
         construcTab(result, reset)
@@ -34,7 +36,7 @@ function get_user_name(id) {
     method: 'POST',
     async: false,
     url: urlRequest,
-    success: function (result) {
+    success: function(result) {
       username = result[0]["username"]
     }
   })
@@ -49,7 +51,7 @@ function gat_data_map(id) {
       method: 'POST',
       async: false,
       url: urlRequest,
-      success: function (result) {
+      success: function(result) {
         title = result[0]["title"]
         imageUrl = "https://assets.ppy.sh/beatmaps/" + result[0]["beatmapset_id"] + "/covers/cover.jpg"
         dataMap.push(title)
@@ -186,7 +188,9 @@ function tabMatch(maps, name, resets) {
   blue_name = name.match(/(?<=: \()(.*)(?=\) vs)/g) //("(?<=: \()(.*)(?=\) vs)")
   red_name = name.match(/(?<=vs \()(.*)(?=\))/g)
   lobby = $("#lobbysel").val()
-  if(lobby == ""){alert("please select a lobby")}
+  if (lobby == "") {
+    alert("please select a lobby")
+  }
 
   if (blue_name.length > 8) {
     blue_name = blue_name.substring(0, 7) + ".."
@@ -224,27 +228,23 @@ function tabMatch(maps, name, resets) {
     for (var j = 0; j < scores.length; j++) {
       if (scores[j]["team"] == 1) {
         score = 0
-        if(scores[j]["user_id"] == team1["t1"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T1
+        if (scores[j]["user_id"] == team1["t1"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t1"]["multiplicator"]
+        } else if (scores[j]["user_id"] == team1["t2"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t2"]["multiplicator"]
+        } else if (scores[j]["user_id"] == team1["t3"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t3"]["multiplicator"]
         }
-        else if(scores[j]["user_id"] == team1["t2"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T2
-        }
-        else if(scores[j]["user_id"] == team1["t3"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T3
-        }
-        
+
         blue_score += score
       } else if (scores[j]["team"] == 2) {
         score = 0
-        if(scores[j]["user_id"] == team2["t1"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T1
-        }
-        else if(scores[j]["user_id"] == team2["t2"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T2
-        }
-        else if(scores[j]["user_id"] == team2["t3"]){
-          score = parseInt(scores[j]["score"]) * MULTIPLICATOR_T3
+        if (scores[j]["user_id"] == team2["t1"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t1"]["multiplicator"]
+        } else if (scores[j]["user_id"] == team2["t2"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t2"]["multiplicator"]
+        } else if (scores[j]["user_id"] == team2["t3"]["userid"]) {
+          score = parseInt(scores[j]["score"]) * team1["t3"]["multiplicator"]
         }
         red_score += score
 
@@ -269,11 +269,11 @@ function tabMatch(maps, name, resets) {
     matchResult += '</tr>';
   }
 
-  if (point_red > point_blue) {
-    $("#mvp").html("\"" + red_name + "\" " + point_red + "-" + point_blue + " \"" + blue_name + "\" ")
-  } else {
-    $("#mvp").html("\"" + blue_name + "\" " + point_blue + "-" + point_red + " \"" + red_name + "\" ")
-  }
+  mvp = "\"" + red_name + "\" " + point_red + "-" + point_blue + " \"" + blue_name + "\". Au tour de "
+
+  mvp += ' de pick'
+  $("#mvp").html(mvp)
+
   if (resets) {
     reset()
   }
@@ -310,6 +310,7 @@ function construcTab(jsonMatch, resets) {
 
 
 function createCommandTab(lobby) {
+  lobbbyVAR = lobby;
   //lobby = "H31"
   tabHEAD = "<thead><tr><td>Commandes :</td></tr></thead>"
 
@@ -327,11 +328,11 @@ function createCommandTab(lobby) {
 
   $("#commandsTab").html(tabHEAD)
 
-  tab2HEAD = "<thead><tr><td>Mods :</td><td>Copy/paste :</td></tr></thead>"
+  tab2HEAD = "<thead><tr><td>Mods :</td><td>Check</td><td>Copy/paste :</td></tr></thead>"
   mappool = team["mappools"][team["lobby"][lobby]["mappool"]]
 
   for (var map in mappool) {
-    tab2HEAD += "<tr><td>" + map + "</td>"
+    tab2HEAD += "<tr><td>" + map + '</td><td><input type="checkbox" class="form-check-input" id="exampleCheck1"></td>'
 
     tab2HEAD += "<td>"
     mod = map.substring(0, 2)
@@ -359,25 +360,25 @@ function createCommandTab(lobby) {
 
 function createlobbylit() {
   alllobby = "<option value=\"\">Select a lobby</option>"
-  for(var lobby in team["lobby"]){
+  for (var lobby in team["lobby"]) {
     console.log(lobby)
-    alllobby+="<option value=\"" + lobby + "\">"+ lobby +"</option>"
+    alllobby += "<option value=\"" + lobby + "\">" + lobby + "</option>"
   }
 
   $("#lobbysel").html(alllobby)
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
   createlobbylit()
-  
 
 
-$("#lobbysel").change(function () {
-  createCommandTab($("#lobbysel").val())
-});
+
+  $("#lobbysel").change(function() {
+    createCommandTab($("#lobbysel").val())
+  });
 
 
-  $('#mpLink').on('paste', function () {
+  $('#mpLink').on('paste', function() {
     var element = this;
     setTimeout(() => {
       var text = $(element).val();
@@ -386,7 +387,7 @@ $("#lobbysel").change(function () {
       getMatch(id)
 
     }, 100);
-    setInterval(function () {
+    setInterval(function() {
       var text = $(element).val();
       id = text.split("/")
       id = id[id.length - 1]
@@ -405,44 +406,366 @@ function reset() {
 }
 
 
+
+
+
 var team = {
   "teams": {
-    "owokashi": {
-      "captain": "agosthyno3449",
-      "t1" : "9003832",
-      "t2" : 3897665,
-      "t3" : 3897665,
+    "TeamA": {
+      "captain": "Numero_Zer0e",
+      "t1": {
+        "userid": 7630971,
+        "username": "VROUM CV VITE",
+        "multiplicator": 0.6
+      },
+      "t2": {
+        "userid": 13607925,
+        "username": "Matroc",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 13352562,
+        "username": "Numero_Zer0e",
+        "multiplicator": 1
+      },
     },
-    "Sverd": {
-      "captain": "Sverdsdf",
-      "t1" : 11854446,
-      "t2" : 6472042,
-      "t3" : 3897665,
+    "TeamB": {
+      "captain": "[Kaichou]",
+      "t1": {
+        "userid": 4141918,
+        "username": "thundur",
+        "multiplicator": 0.6
+      },
+      "t2": {
+        "userid": 7898584,
+        "username": "[Kaichou]",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 14951633,
+        "username": "LouisD",
+        "multiplicator": 1
+      },
     },
-    "test": {
-      "captain": "nosif"
+    "Souci de Compétence": {
+      "captain": "Crynless",
+      "t1": {
+        "userid": 8236827,
+        "username": "Fumatsu",
+        "multiplicator": 0.6
+      },
+      "t2": {
+        "userid": 11395097,
+        "username": "Kurumy",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 5850031,
+        "username": "Crynless",
+        "multiplicator": 1
+      },
     },
-    "eeee": {
-      "captain": "max"
-    }
+    "Speed Abusers": {
+      "captain": "Fuki",
+      "t1": {
+        "userid": 3674590,
+        "username": "Sukiye",
+        "multiplicator": 0.65
+      },
+      "t2": {
+        "userid": 6567341,
+        "username": "Fuki",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 9209071,
+        "username": "Isillios",
+        "multiplicator": 1
+      },
+    },
+    "TeamE": {
+      "captain": "XeKr",
+      "t1": {
+        "userid": 7640581,
+        "username": "Lexonox",
+        "multiplicator": 0.65
+      },
+      "t2": {
+        "userid": 11559857,
+        "username": "Youlix",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 9358042,
+        "username": "XeKr",
+        "multiplicator": 1
+      },
+    },
+    "AR 8 enjoyer": {
+      "captain": "WesomePizza",
+      "t1": {
+        "userid": 10304774,
+        "username": "Ilmay",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 16417954,
+        "username": "WesomePizza",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 14394351,
+        "username": "I4MTRUE",
+        "multiplicator": 1
+      },
+    },
+    "FlasTEH Fanclub": {
+      "captain": "Hyuras",
+      "t1": {
+        "userid": 13579528,
+        "username": "Hyuras",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 11934951,
+        "username": "Osu Prop",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 11189164,
+        "username": "Ryshult",
+        "multiplicator": 1
+      },
+    },
+    "TeamH": {
+      "captain": "Not Airwam",
+      "t1": {
+        "userid": 14309415,
+        "username": "submissive",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 6402779,
+        "username": "Flamiror",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 17442279,
+        "username": "Not Airwam",
+        "multiplicator": 1
+      },
+    },
+    "gift issue": {
+      "captain": "NeoBurgerYT",
+      "t1": {
+        "userid": 8769136,
+        "username": "Takamin",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 12138133,
+        "username": "NeoBurgerYT",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 12176990,
+        "username": "Panzers",
+        "multiplicator": 1
+      },
+    },
+    "TeamJ": {
+      "captain": "Warex",
+      "t1": {
+        "userid": 10819779,
+        "username": "Warex",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 9282017,
+        "username": "Forw3n",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 7020512,
+        "username": "Kayuzo",
+        "multiplicator": 1
+      },
+    },
+    "Mouseesport et le T3": {
+      "captain": "Jaroda2000",
+      "t1": {
+        "userid": 4784772,
+        "username": "]- Cloud -[",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 14335827,
+        "username": "Gifted",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 7622802,
+        "username": "Jaroda2000",
+        "multiplicator": 1
+      },
+    },
+    "Hot Wheels Acceleracers": {
+      "captain": "JeeeeeeeeeeeeeJ",
+      "t1": {
+        "userid": 4869346,
+        "username": "Afmun",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 8831121,
+        "username": "JeeeeeeeeeeeeeJ",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 14363130,
+        "username": "Shydio",
+        "multiplicator": 1
+      },
+    },
+    "Atsukotrobo": {
+      "captain": "Foussilin",
+      "t1": {
+        "userid": 11934348,
+        "username": "Foussilin",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 12674517,
+        "username": "Fayar",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 27590609,
+        "username": "Yusahira",
+        "multiplicator": 1
+      },
+    },
+    "Super Seducers": {
+      "captain": "Tig",
+      "t1": {
+        "userid": 13935409,
+        "username": "BioTyC",
+        "multiplicator": 0.7
+      },
+      "t2": {
+        "userid": 6745742,
+        "username": "Tig",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 9652467,
+        "username": "LeDes",
+        "multiplicator": 1
+      },
+    },
+    "Aujourd'hui on Vaz": {
+      "captain": "BProd",
+      "t1": {
+        "userid": 11345747,
+        "username": "BProd",
+        "multiplicator": 0.65
+      },
+      "t2": {
+        "userid": 3723612,
+        "username": "Rulue",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 1522146,
+        "username": "Aidown",
+        "multiplicator": 1
+      },
+    },
+    "TeamP": {
+      "captain": "-raizen-",
+      "t1": {
+        "userid": 3872987,
+        "username": "-raizen-",
+        "multiplicator": 0.65
+      },
+      "t2": {
+        "userid": 13682992,
+        "username": "lachevre",
+        "multiplicator": 0.8
+      },
+      "t3": {
+        "userid": 4715753,
+        "username": "Tarkhen",
+        "multiplicator": 1
+      },
+    },
+
   },
 
   "lobby": {
-    "H31": {
-      "1": "owokashi",
-      "2": "Sverd",
+    "RO16_1": {
+      "1": "TeamA",
+      "2": "TeamP",
       "mappool": "RO16"
     },
-    "H32": {
-      "1": "test",
-      "2": "eeee",
+    "RO16_2": {
+      "1": "TeamH",
+      "2": "gift issue",
+      "mappool": "RO16"
+    },
+    "RO16_3": {
+      "1": "Speed Abusers",
+      "2": "Atsukotrobo",
+      "mappool": "RO16"
+    },
+    "RO16_4": {
+      "1": "TeamE",
+      "2": "Hot Wheels Acceleracers",
+      "mappool": "RO16"
+    },
+    "RO16_5": {
+      "1": "TeamB",
+      "2": "Aujourd'hui on Vaz",
+      "mappool": "RO16"
+    },
+    "RO16_6": {
+      "1": "FlasTEH Fanclub",
+      "2": "TeamJ",
+      "mappool": "RO16"
+    },
+    "RO16_7": {
+      "1": "Souci de Compétence",
+      "2": "Super Seducers",
+      "mappool": "RO16"
+    },
+    "RO16_8": {
+      "1": "AR 8 enjoyer",
+      "2": "Mouseesport et le T3",
       "mappool": "RO16"
     }
+
   },
   "mappools": {
     "RO16": {
-      "NM1": 12435,
-      "HR1": 6345
+      "NM1": 2742359,
+      "NM2": 3373876,
+      "NM3": 2835894,
+      "NM4": 2154177,
+      "NM5": 2613061,
+      "HD1": 3264577,
+      "HD2": 52741,
+      "HD3": 1515987,
+      "HR1": 2297631,
+      "HR2": 3356278,
+      "HR3": 3029745,
+      "DT1": 1939016,
+      "DT2": 1860373,
+      "DT3": 45076,
+      "TB3": 351752,
+      "TB3": 2608893,
+      "TB3": 2224209
     }
   }
+}
+
 }
