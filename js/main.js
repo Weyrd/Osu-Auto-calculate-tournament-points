@@ -12,7 +12,8 @@ var blueRoll = 0
 var redNamVar,
   blueRedVar,
   pointBlueVar,
-  pointRedVar;
+  pointRedVar,
+  MPLINKVAR;
 
 //
 function getMatch(id, reset) {
@@ -185,7 +186,7 @@ function tab1v1Qualif(maps, resets) {
   return matchResultHEAD + matchResult
 }
 
-function tabMatch(maps, name, resets) {
+function tabMatch(maps, name, resets, n_warmup) {
   point_red = 0
   point_blue = 0
 
@@ -209,6 +210,8 @@ function tabMatch(maps, name, resets) {
   matchResult = ""
   numberMap = 1
   last = "ALO"
+  mapRO = team["mappools"][team["lobby"][lobby]["mappool"]]
+
   for (var i = 0; i < maps.length; i++) {
     map_data = gat_data_map(maps[i]["beatmap_id"])
     scores = maps[i]["scores"]
@@ -216,12 +219,23 @@ function tabMatch(maps, name, resets) {
     blue_score = 0
     red_score = 0
 
+
+
     matchResult += '<tr>';
     matchResult += '<td style="width : 1px;">' + i + '</td>';
     chehModsData = chekMods(parseInt(maps[i]["mods"]), numberMap, last)
-    mod = chehModsData[0]
+    mod = "" //chehModsData[0]
     last = chehModsData[1]
     numberMap = chehModsData[2]
+
+    for (const [key, value] of Object.entries(mapRO)) {
+      if (maps[i]["beatmap_id"] == value) {
+        mod = key
+      }
+    }
+    if (mod == "") {
+      mod = "warmup"
+    }
 
     matchResult += '<td style="width : 1%;">' + mod + '</td>';
     matchResult += '<td style="width:27%;"><img  class="cover" src="' + map_data[1] + '" alt=""> ' + map_data[0] + '</td>';
@@ -233,22 +247,22 @@ function tabMatch(maps, name, resets) {
       if (scores[j]["team"] == 1) {
         score = 0
         if (scores[j]["user_id"] == team1["t1"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t1"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t1"]["multiplicator"])
         } else if (scores[j]["user_id"] == team1["t2"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t2"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t2"]["multiplicator"])
         } else if (scores[j]["user_id"] == team1["t3"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t3"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t3"]["multiplicator"])
         }
 
         blue_score += score
       } else if (scores[j]["team"] == 2) {
         score = 0
         if (scores[j]["user_id"] == team2["t1"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t1"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t1"]["multiplicator"])
         } else if (scores[j]["user_id"] == team2["t2"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t2"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t2"]["multiplicator"])
         } else if (scores[j]["user_id"] == team2["t3"]["userid"]) {
-          score = parseInt(scores[j]["score"]) * team1["t3"]["multiplicator"]
+          score = parseInt((scores[j]["score"]) * team1["t3"]["multiplicator"])
         }
         red_score += score
 
@@ -256,12 +270,16 @@ function tabMatch(maps, name, resets) {
     }
     ecart = 0
     if (blue_score > red_score) {
-      point_blue += 1
+      if (i >= n_warmup) {
+        point_blue += 1
+      }
       ecart = blue_score - red_score
       blue_score = "<p style='color:green'>" + numberWithSpaces(blue_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
       red_score = "<p style='color:red'>" + numberWithSpaces(red_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
     } else {
-      point_red += 1
+      if (i >= n_warmup) {
+        point_red += 1
+      }
       ecart = red_score - blue_score
       red_score = "<p style='color:green'>" + numberWithSpaces(red_score) + "</p>"
       blue_score = "<p style='color:red'>" + numberWithSpaces(blue_score) + "</p>"
@@ -277,7 +295,7 @@ function tabMatch(maps, name, resets) {
   pointBlueVar = point_blue
   pointRedVar = point_red
 
-  mvp = "\"" + red_name + "\" " + point_red + "-" + point_blue + " \"" + blue_name + "\". Au tour de "
+  mvp = "\"" + red_name + "\" " + point_red + "-" + point_blue + " \"" + blue_name + "\". </br>Au tour de "
 
   if (nmmap % 2 == 0) {
     if ($("#reverse")[0].checked) {
@@ -298,6 +316,7 @@ function tabMatch(maps, name, resets) {
   if (resets) {
     reset()
   }
+  discord()
   return matchResultHEAD + matchResult
 }
 
@@ -306,11 +325,9 @@ function construcTab(jsonMatch, resets) {
   name = jsonMatch["match"]["name"]
   maps = jsonMatch["games"]
   for (var i = 0; i < parseInt($("#warmupNumber").val()); i++) {
-    maps.shift()
+    //maps.shift()
   }
-  for (var i = 0; i < parseInt($("#forFunNumber").val()); i++) {
-    maps.pop()
-  }
+  n_warmup = parseInt($("#warmupNumber").val())
 
 
   // 1 = blue, 2 = red
@@ -325,7 +342,7 @@ function construcTab(jsonMatch, resets) {
     }
   } else if (maps[0]["team_type"] == 2) {
     console.log("match");
-    $("#matchTab").html(tabMatch(maps, name, resets))
+    $("#matchTab").html(tabMatch(maps, name, resets, n_warmup))
   }
 }
 
@@ -340,7 +357,6 @@ function createCommandTab(lobby) {
 
   team2 = team["lobby"][lobby]["2"]
 
-  console.log(team1);
 
   tabHEAD += "</tr><td>!mp make LRAPO2: (" + team1 + ") vs (" + team2 + ")</td></tr>"
   tabHEAD += "<tr><td>!mp set 2 3 16</td></tr>"
@@ -381,7 +397,7 @@ function createCommandTab(lobby) {
   $(".exampleCheck1").click(function() {
     nmmap += 1
 
-    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". Au tour de "
+    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". </br>Au tour de "
 
     if (nmmap % 2 == 0) {
       if ($("#reverse")[0].checked) {
@@ -405,7 +421,6 @@ function createCommandTab(lobby) {
 function createlobbylit() {
   alllobby = "<option value=\"\">Select a lobby</option>"
   for (var lobby in team["lobby"]) {
-    console.log(lobby)
     alllobby += "<option value=\"" + lobby + "\">" + lobby + "</option>"
   }
 
@@ -430,7 +445,7 @@ $(document).ready(function() {
 
   });
   $("#reverse").change(function() {
-    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". Au tour de "
+    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". </br>Au tour de "
 
     if (nmmap % 2 == 0) {
       if ($("#reverse")[0].checked) {
@@ -455,6 +470,7 @@ $(document).ready(function() {
     var element = this;
     setTimeout(() => {
       var text = $(element).val();
+      MPLINKVAR = text
       id = text.split("/")
       id = id[id.length - 1]
       getMatch(id)
@@ -478,7 +494,18 @@ function reset() {
     .draw();
 }
 
-
+function discord() {
+  msg = "Remplacez les mots 'MAP_BAN' et 'NUMBER' par les bonnes valeurs à la main : </br>"
+  msg += "</br>**RO16 - " + lobby + "**"
+  msg += "</br>" + team["lobby"][lobby]["1"] + " | " + pointBlueVar + "-" + pointRedVar + " | " + team["lobby"][lobby]["2"]
+  msg += "</br>"
+  msg += "</br>**Bans :**"
+  msg += "</br>**" + team["lobby"][lobby]["1"] + "** : MAP_BAN `(roll NUMBER)`"
+  msg += "</br>**" + team["lobby"][lobby]["2"] + "** : MAP_BAN `(roll NUMBER)`"
+  msg += "</br>MP Link : " + MPLINKVAR + ""
+  msg += "<br><a href='https://discord.com/channels/773969942479503381/951601812572606525' target='_blank'>Dans ce channel</a>"
+  $("#discord").html(msg)
+}
 
 
 
