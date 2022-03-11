@@ -4,16 +4,20 @@ var apiResult = {}
 var MULTIPLICATOR_T1 = 1
 var MULTIPLICATOR_T2 = 1
 var MULTIPLICATOR_T3 = 1
-var last_pick = 1
+var nmmap = 0
 var lobbyVAR = ""
+
+var redRoll = 0
+var blueRoll = 0
+var redNamVar,
+  blueRedVar,
+  pointBlueVar,
+  pointRedVar;
+
 //
 function getMatch(id, reset) {
   if (isNaN(parseInt(id))) {
     alert("Merci de coller un match link valide");
-    return;
-  }
-  if ($("#reffereName").val() != "") {
-    alert("Merci de mettre un nom de ref")
     return;
   } else {
     $.ajax({
@@ -268,9 +272,26 @@ function tabMatch(maps, name, resets) {
 
     matchResult += '</tr>';
   }
+  redNamVar = red_name
+  blueRedVar = blue_name
+  pointBlueVar = point_blue
+  pointRedVar = point_red
 
   mvp = "\"" + red_name + "\" " + point_red + "-" + point_blue + " \"" + blue_name + "\". Au tour de "
 
+  if (nmmap % 2 == 0) {
+    if ($("#reverse")[0].checked) {
+      mvp += blue_name
+    } else {
+      mvp += red_name
+    }
+  } else {
+    if ($("#reverse")[0].checked) {
+      mvp += red_name
+    } else {
+      mvp += blue_name
+    }
+  }
   mvp += ' de pick'
   $("#mvp").html(mvp)
 
@@ -325,6 +346,9 @@ function createCommandTab(lobby) {
   tabHEAD += "<tr><td>!mp set 2 3 16</td></tr>"
   tabHEAD += "<tr><td>!mp invite " + team["teams"][team1]["captain"] + " (Important  : team bleu) </td></tr>"
   tabHEAD += "<tr><td>!mp invite " + team["teams"][team2]["captain"] + " (Important  : team red)</td></tr>"
+  tabHEAD += "<tr><td>!mp host " + team["teams"][team1]["captain"] + "</td></tr>"
+  tabHEAD += "<tr><td>!mp host " + team["teams"][team2]["captain"] + "</td></tr>"
+  tabHEAD += "<tr><td>!mp clearhost</td></tr>"
 
   $("#commandsTab").html(tabHEAD)
 
@@ -332,7 +356,7 @@ function createCommandTab(lobby) {
   mappool = team["mappools"][team["lobby"][lobby]["mappool"]]
 
   for (var map in mappool) {
-    tab2HEAD += "<tr><td>" + map + '</td><td><input type="checkbox" class="form-check-input" id="exampleCheck1"></td>'
+    tab2HEAD += "<tr><td>" + map + '</td><td><input type="checkbox" class="form-check-input exampleCheck1" id=""></td>'
 
     tab2HEAD += "<td>"
     mod = map.substring(0, 2)
@@ -354,7 +378,27 @@ function createCommandTab(lobby) {
   }
 
   $("#mappoolTab").html(tab2HEAD)
+  $(".exampleCheck1").click(function() {
+    nmmap += 1
 
+    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". Au tour de "
+
+    if (nmmap % 2 == 0) {
+      if ($("#reverse")[0].checked) {
+        mvp += blueRedVar
+      } else {
+        mvp += redNamVar
+      }
+    } else {
+      if ($("#reverse")[0].checked) {
+        mvp += redNamVar
+      } else {
+        mvp += blueRedVar
+      }
+    }
+    mvp += ' de pick'
+    $("#mvp").html(mvp)
+  });
 }
 
 
@@ -376,6 +420,35 @@ $(document).ready(function() {
   $("#lobbysel").change(function() {
     createCommandTab($("#lobbysel").val())
   });
+
+  $("#RollRedTeam").change(function() {
+    redRoll = $("#RollRedTeam").val()
+  });
+
+  $("#RollBlueTeam").change(function() {
+    blueRoll = $("#RollBlueTeam").val()
+
+  });
+  $("#reverse").change(function() {
+    mvp = "\"" + redNamVar + "\" " + pointRedVar + "-" + pointBlueVar + " \"" + blueRedVar + "\". Au tour de "
+
+    if (nmmap % 2 == 0) {
+      if ($("#reverse")[0].checked) {
+        mvp += blueRedVar
+      } else {
+        mvp += redNamVar
+      }
+    } else {
+      if ($("#reverse")[0].checked) {
+        mvp += redNamVar
+      } else {
+        mvp += blueRedVar
+      }
+    }
+    mvp += ' de pick'
+    $("#mvp").html(mvp)
+  });
+
 
 
   $('#mpLink').on('paste', function() {
@@ -411,7 +484,7 @@ function reset() {
 
 var team = {
   "teams": {
-    "TeamA": {
+    "Personne n'a d'idée en fait.": {
       "captain": "Numero_Zer0e",
       "t1": {
         "userid": 7630971,
@@ -483,7 +556,7 @@ var team = {
         "multiplicator": 1
       },
     },
-    "TeamE": {
+    "Team E": {
       "captain": "XeKr",
       "t1": {
         "userid": 7640581,
@@ -537,7 +610,7 @@ var team = {
         "multiplicator": 1
       },
     },
-    "TeamH": {
+    "4zVibe": {
       "captain": "Not Airwam",
       "t1": {
         "userid": 14309415,
@@ -573,7 +646,7 @@ var team = {
         "multiplicator": 1
       },
     },
-    "TeamJ": {
+    "Le J c'est le S": {
       "captain": "Warex",
       "t1": {
         "userid": 10819779,
@@ -704,12 +777,12 @@ var team = {
 
   "lobby": {
     "RO16_1": {
-      "1": "TeamA",
+      "1": "Personne n'a d'idée en fait.",
       "2": "TeamP",
       "mappool": "RO16"
     },
     "RO16_2": {
-      "1": "TeamH",
+      "1": "4zVibe",
       "2": "gift issue",
       "mappool": "RO16"
     },
@@ -719,7 +792,7 @@ var team = {
       "mappool": "RO16"
     },
     "RO16_4": {
-      "1": "TeamE",
+      "1": "Team E",
       "2": "Hot Wheels Acceleracers",
       "mappool": "RO16"
     },
@@ -730,7 +803,7 @@ var team = {
     },
     "RO16_6": {
       "1": "FlasTEH Fanclub",
-      "2": "TeamJ",
+      "2": "Le J c'est le S",
       "mappool": "RO16"
     },
     "RO16_7": {
@@ -766,6 +839,4 @@ var team = {
       "TB3": 2224209
     }
   }
-}
-
 }
