@@ -43,11 +43,18 @@
       <div class="col-md-2"></div> <!-- spacer -->
       <div class="options col-md-3">
         <div class="row">
-          <label for="lobbysel">Select lobby :</label>
-
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="">Select lobby</span>
+          </div>
           <select name="lobbyid" id="lobbysel">
 
           </select>
+        </div>
+        <div class="row">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="">Reverse pick order</span>
+          </div>
+          <input type="checkbox" id="reverse" class="form-check-input">
         </div>
 
 
@@ -63,10 +70,7 @@
           <input type="text" id="mpLink" class="form-control">
         </div>
 
-        <div class="row">
-          <label for="reverse">Reverse pick order</label>
-          <input type="checkbox" id="reverse" class="form-check-input" value="">
-        </div>
+
       </div>
     </div>
 

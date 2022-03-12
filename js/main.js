@@ -366,6 +366,7 @@ function createCommandTab(lobby) {
   tabHEAD += "<tr><td>!mp host " + team["teams"][team1]["captain"] + "</td></tr>"
   tabHEAD += "<tr><td>!mp host " + team["teams"][team2]["captain"] + "</td></tr>"
   tabHEAD += "<tr><td>!mp clearhost</td></tr>"
+  tabHEAD += "<tr><td>!mp start 10</td></tr>"
 
   $("#commandsTab").html(tabHEAD)
 
@@ -420,7 +421,7 @@ function createCommandTab(lobby) {
 
 
 function createlobbylit() {
-  alllobby = "<option value=\"\">Select a lobby</option>"
+  alllobby = "<option value=\"\">All</option>"
   for (var lobby in team["lobby"]) {
     alllobby += "<option value=\"" + lobby + "\">" + lobby + "</option>"
   }
@@ -862,8 +863,8 @@ var team = {
       "DT1": 1939016,
       "DT2": 1860373,
       "DT3": 45076,
-      "TB3": 351752,
-      "TB3": 2608893,
+      "TB1": 351752,
+      "TB2": 2608893,
       "TB3": 2224209
     }
   }
