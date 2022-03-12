@@ -13,7 +13,7 @@ var redNamVar,
   blueRedVar,
   pointBlueVar,
   pointRedVar,
-  MPLINKVAR;
+  MPLINKVAR, VARWARMUP = 0;
 
 //
 function getMatch(id, reset) {
@@ -186,7 +186,7 @@ function tab1v1Qualif(maps, resets) {
   return matchResultHEAD + matchResult
 }
 
-function tabMatch(maps, name, resets, n_warmup) {
+function tabMatch(maps, name, resets) {
   point_red = 0
   point_blue = 0
 
@@ -212,6 +212,7 @@ function tabMatch(maps, name, resets, n_warmup) {
   last = "ALO"
   mapRO = team["mappools"][team["lobby"][lobby]["mappool"]]
 
+  VARWARMUP = 0
   for (var i = 0; i < maps.length; i++) {
     map_data = gat_data_map(maps[i]["beatmap_id"])
     scores = maps[i]["scores"]
@@ -235,6 +236,7 @@ function tabMatch(maps, name, resets, n_warmup) {
     }
     if (mod == "") {
       mod = "warmup"
+      VARWARMUP += 1
     }
 
     matchResult += '<td style="width : 1%;">' + mod + '</td>';
@@ -270,14 +272,14 @@ function tabMatch(maps, name, resets, n_warmup) {
     }
     ecart = 0
     if (blue_score > red_score) {
-      if (i >= n_warmup) {
+      if (i >= VARWARMUP) {
         point_blue += 1
       }
       ecart = blue_score - red_score
       blue_score = "<p style='color:green'>" + numberWithSpaces(blue_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
       red_score = "<p style='color:red'>" + numberWithSpaces(red_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
     } else {
-      if (i >= n_warmup) {
+      if (i >= VARWARMUP) {
         point_red += 1
       }
       ecart = red_score - blue_score
@@ -327,7 +329,6 @@ function construcTab(jsonMatch, resets) {
   for (var i = 0; i < parseInt($("#warmupNumber").val()); i++) {
     //maps.shift()
   }
-  n_warmup = parseInt($("#warmupNumber").val())
 
 
   // 1 = blue, 2 = red
@@ -342,7 +343,7 @@ function construcTab(jsonMatch, resets) {
     }
   } else if (maps[0]["team_type"] == 2) {
     console.log("match");
-    $("#matchTab").html(tabMatch(maps, name, resets, n_warmup))
+    $("#matchTab").html(tabMatch(maps, name, resets))
   }
 }
 
