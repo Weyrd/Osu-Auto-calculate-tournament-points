@@ -513,6 +513,7 @@ function reset() {
 
 function discord() {
   //msg = "Remplacez les mots 'MAP_BAN' et 'NUMBER' par les bonnes valeurs à la main :\n"
+  msg = ""
   msg += "\n**RO16 - " + lobby + "**"
   msg += "\n" + team["lobby"][lobby]["1"] + " | " + pointBlueVar + "-" + pointRedVar + " | " + team["lobby"][lobby]["2"]
   msg += "\n"
