@@ -244,27 +244,36 @@ function tabMatch(maps, name, resets) {
 
     team1 = team["teams"][team["lobby"][lobby]["1"]]
     team2 = team["teams"][team["lobby"][lobby]["2"]]
-
+    strScoreBlue = ""
+    strScoreRed = ""
     for (var j = 0; j < scores.length; j++) {
+
       if (scores[j]["team"] == 1) {
+
         score = 0
         if (scores[j]["user_id"] == team1["t1"]["userid"]) {
           score = parseInt((scores[j]["score"]) * team1["t1"]["multiplicator"])
+          strScoreBlue += parseInt(scores[j]["score"]).toString() + " * " + team1["t1"]["multiplicator"].toString() + " + "
         } else if (scores[j]["user_id"] == team1["t2"]["userid"]) {
           score = parseInt((scores[j]["score"]) * team1["t2"]["multiplicator"])
+          strScoreBlue += parseInt(scores[j]["score"]).toString() + " * " + team1["t2"]["multiplicator"].toString() + " + "
         } else if (scores[j]["user_id"] == team1["t3"]["userid"]) {
           score = parseInt((scores[j]["score"]) * team1["t3"]["multiplicator"])
+          strScoreBlue += parseInt(scores[j]["score"]).toString() + " * " + team1["t3"]["multiplicator"].toString() + " + "
         }
 
         blue_score += score
       } else if (scores[j]["team"] == 2) {
         score = 0
         if (scores[j]["user_id"] == team2["t1"]["userid"]) {
-          score = parseInt((scores[j]["score"]) * team1["t1"]["multiplicator"])
+          score = parseInt((scores[j]["score"]) * team2["t1"]["multiplicator"])
+          strScoreRed += parseInt(scores[j]["score"]).toString() + " * " + team2["t1"]["multiplicator"].toString() + " + "
         } else if (scores[j]["user_id"] == team2["t2"]["userid"]) {
-          score = parseInt((scores[j]["score"]) * team1["t2"]["multiplicator"])
+          score = parseInt((scores[j]["score"]) * team2["t2"]["multiplicator"])
+          strScoreRed += parseInt(scores[j]["score"]).toString() + " * " + team2["t2"]["multiplicator"].toString() + " + "
         } else if (scores[j]["user_id"] == team2["t3"]["userid"]) {
-          score = parseInt((scores[j]["score"]) * team1["t3"]["multiplicator"])
+          score = parseInt((scores[j]["score"]) * team2["t3"]["multiplicator"])
+          strScoreRed += parseInt(scores[j]["score"]).toString() + " * " + team2["t3"]["multiplicator"].toString() + " + "
         }
         red_score += score
 
@@ -273,18 +282,24 @@ function tabMatch(maps, name, resets) {
     ecart = 0
     if (blue_score > red_score) {
       if (i >= VARWARMUP) {
-        point_blue += 1
+        if (blue_score != 0 && red_score != 0 && mod != "warmup") {
+          point_blue += 1
+        }
+
       }
       ecart = blue_score - red_score
-      blue_score = "<p style='color:green'>" + numberWithSpaces(blue_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
-      red_score = "<p style='color:red'>" + numberWithSpaces(red_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
+      blue_score = "<p style='color:green'>" + strScoreBlue + " :</br>" + numberWithSpaces(blue_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
+      red_score = "<p style='color:red'>" + strScoreRed + " :</br>" + numberWithSpaces(red_score) + "</p>" //////////////////////////////////////////////////"])//////////////////////////////////////////////////
     } else {
       if (i >= VARWARMUP) {
-        point_red += 1
+        if (blue_score != 0 && red_score != 0 && mod != "warmup") {
+          point_red += 1
+        }
+
       }
       ecart = red_score - blue_score
-      red_score = "<p style='color:green'>" + numberWithSpaces(red_score) + "</p>"
-      blue_score = "<p style='color:red'>" + numberWithSpaces(blue_score) + "</p>"
+      red_score = "<p style='color:green'>" + strScoreRed + " :</br>" + numberWithSpaces(red_score) + "</p>"
+      blue_score = "<p style='color:red'>" + strScoreBlue + " :</br>" + numberWithSpaces(blue_score) + "</p>"
     }
     matchResult += '<td>' + blue_score + '</td>';
     matchResult += '<td>' + red_score + '</td>';
@@ -361,8 +376,8 @@ function createCommandTab(lobby) {
 
   tabHEAD += "</tr><td>!mp make LRAPO2: (" + team1 + ") vs (" + team2 + ")</td></tr>"
   tabHEAD += "<tr><td>!mp set 2 3 16</td></tr>"
-  tabHEAD += "<tr><td>!mp invite " + team["teams"][team1]["captain"] + " (Important  : team bleu) </td></tr>"
-  tabHEAD += "<tr><td>!mp invite " + team["teams"][team2]["captain"] + " (Important  : team red)</td></tr>"
+  tabHEAD += "<tr><td>!mp invite " + team["teams"][team1]["captain"] + " (Important  : team bleu " + team1 + ") </td></tr>"
+  tabHEAD += "<tr><td>!mp invite " + team["teams"][team2]["captain"] + " (Important  : team red " + team2 + ")</td></tr>"
   tabHEAD += "<tr><td>!mp host " + team["teams"][team1]["captain"] + "</td></tr>"
   tabHEAD += "<tr><td>!mp host " + team["teams"][team2]["captain"] + "</td></tr>"
   tabHEAD += "<tr><td>!mp clearhost</td></tr>"
@@ -497,16 +512,17 @@ function reset() {
 }
 
 function discord() {
-  msg = "Remplacez les mots 'MAP_BAN' et 'NUMBER' par les bonnes valeurs à la main : </br>"
-  msg += "</br>**RO16 - " + lobby + "**"
-  msg += "</br>" + team["lobby"][lobby]["1"] + " | " + pointBlueVar + "-" + pointRedVar + " | " + team["lobby"][lobby]["2"]
-  msg += "</br>"
-  msg += "</br>**Bans :**"
-  msg += "</br>**" + team["lobby"][lobby]["1"] + "** : MAP_BAN `(roll NUMBER)`"
-  msg += "</br>**" + team["lobby"][lobby]["2"] + "** : MAP_BAN `(roll NUMBER)`"
-  msg += "</br>MP Link : " + MPLINKVAR + ""
-  msg += "<br><a href='https://discord.com/channels/773969942479503381/951601812572606525' target='_blank'>Dans ce channel</a>"
-  $("#discord").html(msg)
+  //msg = "Remplacez les mots 'MAP_BAN' et 'NUMBER' par les bonnes valeurs à la main :\n"
+  msg = ""
+  msg += "**" + lobby + "**"
+  msg += "\n" + team["lobby"][lobby]["1"] + " | " + pointBlueVar + "-" + pointRedVar + " | " + team["lobby"][lobby]["2"]
+  msg += "\n"
+  msg += "\n**Bans :**"
+  msg += "\n**" + team["lobby"][lobby]["1"] + "** : MAP_BAN `(roll NUMBER)`"
+  msg += "\n**" + team["lobby"][lobby]["2"] + "** : MAP_BAN `(roll NUMBER)`"
+  msg += "\nMP Link : <" + MPLINKVAR + ">"
+  //msg += "\n<a href='https://discord.com/channels/773969942479503381/951601812572606525' target='_blank'>Dans ce channel</a>"
+  $("#discord").val(msg)
 }
 
 
@@ -729,7 +745,7 @@ var team = {
         "multiplicator": 1
       },
     },
-    "Atsukotrobo": {
+    "Astukotrobo": {
       "captain": "Foussilin",
       "t1": {
         "userid": 11934348,
@@ -783,7 +799,7 @@ var team = {
         "multiplicator": 1
       },
     },
-    "TeamP": {
+    "Poils Humides": {
       "captain": "-raizen-",
       "t1": {
         "userid": 3872987,
@@ -805,9 +821,101 @@ var team = {
   },
 
   "lobby": {
+
+    "RO4_17": {
+      "1": "Mouseesport et le T3",
+      "2": "Personne n'a d'idée en fait.",
+      "mappool": "RO4"
+    },
+    "RO4_18": {
+      "1": "Aujourd'hui on Vaz",
+      "2": "Astukotrobo",
+      "mappool": "RO4"
+    },
+    "RO4_19": {
+      "1": "Speed Abusers",
+      "2": "Le J c'est le S",
+      "mappool": "RO4"
+    },
+    "RO4_20": {
+      "1": "4zVibe",
+      "2": "Super Seducers",
+      "mappool": "RO4"
+    },
+    "RO4_21": {
+      "1": "Speed Abusers OU Le J c'est le S",
+      "2": "4zVibe OU Super Seducers",
+      "mappool": "RO4"
+    },
+    "RO4_22": {
+      "1": "Mouseesport et le T3 OU Personne n'a d'idée en fait.",
+      "2": "Aujourd'hui on Vaz OU Astukotrobo",
+      "mappool": "RO4"
+    },
+    "RO4_23": {
+      "1": "Poils Humides",
+      "2": "Team E",
+      "mappool": "RO4"
+    },
+
+    "RO4_24": {
+      "1": "FlasTEH Fanclub",
+      "2": "Souci de Compétence",
+      "mappool": "RO4"
+    },
+
+
+    "RO8_11": {
+      "1": "TeamB",
+      "2": "Le J c'est le S",
+      "mappool": "RO8"
+    },
+    "RO8_10": {
+      "1": "Astukotrobo",
+      "2": "Hot Wheels Acceleracers",
+      "mappool": "RO8"
+    },
+
+    "RO8_13": {
+      "1": "Poils Humides",
+      "2": "4zVibe",
+      "mappool": "RO8"
+    },
+
+    "RO8_14": {
+      "1": "Speed Abusers",
+      "2": "Team E",
+      "mappool": "RO8"
+    },
+
+    "RO8_15": {
+      "1": "Aujourd'hui on Vaz",
+      "2": "FlasTEH Fanclub",
+      "mappool": "RO8"
+    },
+
+    "RO8_12": {
+      "1": "Super Seducers",
+      "2": "AR 8 enjoyer",
+      "mappool": "RO8"
+    },
+
+    "RO8_16": {
+      "1": "Souci de Compétence",
+      "2": "Mouseesport et le T3",
+      "mappool": "RO8"
+    },
+
+    "RO8_9": {
+      "1": "Personne n'a d'idée en fait.",
+      "2": "gift issue",
+      "mappool": "RO8"
+    },
+
+
     "RO16_1": {
       "1": "Personne n'a d'idée en fait.",
-      "2": "TeamP",
+      "2": "Poils Humides",
       "mappool": "RO16"
     },
     "RO16_2": {
@@ -817,7 +925,7 @@ var team = {
     },
     "RO16_3": {
       "1": "Speed Abusers",
-      "2": "Atsukotrobo",
+      "2": "Astukotrobo",
       "mappool": "RO16"
     },
     "RO16_4": {
@@ -848,6 +956,52 @@ var team = {
 
   },
   "mappools": {
+    "RO4": {
+      "NM1": 3250914,
+      "NM2": 3170081,
+      "NM3": 2854590,
+      "NM4": 3232595,
+      "NM5": 2887101,
+      "NM6": 1513180,
+      "HD1": 3435073,
+      "HD2": 3021082,
+      "HD3": 3355362,
+      "HD4": 2893604,
+      "HR1": 3183280,
+      "HR2": 3523563,
+      "HR3": 2897131,
+      "HR4": 2416430,
+      "DT1": 2854150,
+      "DT2": 2243631,
+      "DT3": 2813113,
+      "DT4": 29704,
+      "TB1": 3473381,
+      "TB2": 245960,
+      "TB3": 381798
+    },
+    "RO8": {
+      "NM1": 2831735,
+      "NM2": 3057533,
+      "NM3": 3316856,
+      "NM4": 2663016,
+      "NM5": 3292028,
+      "NM6": 1618950,
+      "HD1": 3093816,
+      "HD2": 3506343,
+      "HD3": 1543094,
+      "HD4": 263380,
+      "HR1": 3435265,
+      "HR2": 505195,
+      "HR3": 2524468,
+      "HR4": 3481438,
+      "DT1": 3253613,
+      "DT2": 87266,
+      "DT3": 2367746,
+      "DT4": 119415,
+      "TB1": 2238222,
+      "TB2": 3491150,
+      "TB3": 3466270
+    },
     "RO16": {
       "NM1": 2742359,
       "NM2": 3373876,
