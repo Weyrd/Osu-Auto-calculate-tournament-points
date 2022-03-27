@@ -843,13 +843,13 @@ var team = {
       "mappool": "RO4"
     },
     "RO4_21": {
-      "1": "Speed Abusers OU Le J c'est le S",
-      "2": "4zVibe OU Super Seducers",
+      "1": "Speed Abusers",
+      "2": "4zVibe",
       "mappool": "RO4"
     },
     "RO4_22": {
-      "1": "Mouseesport et le T3 OU Personne n'a d'idée en fait.",
-      "2": "Aujourd'hui on Vaz OU Astukotrobo",
+      "1": "Personne n'a d'idée en fait.",
+      "2": "Aujourd'hui on Vaz",
       "mappool": "RO4"
     },
     "RO4_23": {
